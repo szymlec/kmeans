@@ -1,0 +1,80 @@
+#include <cmath>
+#include <iostream>
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
+using namespace std;
+
+struct point {
+  float x, y;
+  point(float xarg, float yarg) {
+    this->x = xarg;
+    this->y = yarg;
+  }
+};
+bool operator<(const point& l, const point& r) {
+  return (l.x < r.x) && (l.y < r.y);
+};
+
+float distance(point a, point b) {
+  return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+}
+
+map<point, vector<point>> assignClusters(vector<point> points,
+                                         vector<point> centers) {
+  map<point, vector<point>> map;
+  for (int j = 0; j < centers.size(); ++j) {
+    vector<point> pusty;
+    map[centers[j]] = pusty;
+  }
+  for (int i = 0; i < points.size(); ++i) {
+    point closest = centers[0];
+    for (int j = 1; j < centers.size(); ++j) {
+      if (distance(points[i], centers[j]) < distance(points[i], closest)) {
+        closest = centers[j];
+      }
+    }
+    // cout << closest.x << " " << closest.y << endl;
+    vector<point> V = map[closest];
+    V.push_back(points[i]);
+    map[closest].swap(V);
+  }
+  return map;
+}
+
+vector<point> movingCenters(map<point, vector<point>> map,
+                            vector<point> centers) {
+  vector<point> newCenters;
+  for (int i = 0; i < map.size(); ++i) {
+    int x, y, n;
+    for (int j = 0; j < map[centers[i]].size(); ++j) {
+      x += map[centers[i]][j].x;
+      y += map[centers[i]][j].y;
+      n++;
+    }
+    newCenters.push_back(point(x / n, y / n));
+  }
+  return newCenters;
+}
+
+vector<point> kmeansClustering(map<point, vector<point>> map,
+                               vector<point> points, vector<point> centers) {
+  centers while ()
+}
+
+int main() {
+  vector<point> points;
+  points.push_back(point(30.00, 29.00));
+  points.push_back(point(45.00, 15.00));
+  points.push_back(point(30.00, 24.00));
+  points.push_back(point(83.00, 29.00));
+  points.push_back(point(32.00, 74.00));
+  vector<point> centers;
+  centers.push_back(point(17.00, 37.00));
+  centers.push_back(point(45.00, 15.00));
+  centers.push_back(point(17.00, 32.00));
+  map<point, vector<point>> wynik = assignClusters(points, centers);
+  return 0;
+}
